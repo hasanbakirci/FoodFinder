@@ -48,6 +48,11 @@ namespace Data.Repositories.CommentRepository
             return await _context.comments.Include(f => f.Food).FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<bool> IsExist(Guid id)
+        {
+            return await _context.comments.AnyAsync(f => f.Id == id);
+        }
+
         public async Task<bool> Update(Comment entity)
         {
             var comment = await _context.comments.SingleOrDefaultAsync(c => c.Id == entity.Id);

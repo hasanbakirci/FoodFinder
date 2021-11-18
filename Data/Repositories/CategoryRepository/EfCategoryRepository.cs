@@ -43,6 +43,11 @@ namespace Data.Repositories.CategoryRepository
             return await _context.categories.FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        public async Task<bool> IsExist(Guid id)
+        {
+            return await _context.categories.AnyAsync(f => f.Id == id);
+        }
+
         public async Task<bool> Update(Category entity)
         {
             var category = await _context.categories.FirstOrDefaultAsync(c => c.Id == entity.Id);

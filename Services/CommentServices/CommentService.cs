@@ -21,6 +21,11 @@ namespace Services.CommentServices
             _mapper = mapper;
         }
 
+        public async Task<bool> CommentIsExist(Guid id)
+        {
+            return await _commentRepository.IsExist(id);
+        }
+
         public async Task<Guid> Create(CreateCommentRequest request)
         {
             var comment = request.ConvertToComment(_mapper);

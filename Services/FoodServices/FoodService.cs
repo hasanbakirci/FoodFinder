@@ -34,7 +34,7 @@ namespace Services.FoodServices
 
         public async Task<bool> FoodIsExist(Guid id)
         {
-            return await _foodRepository.FoodIsExist(id);
+            return await _foodRepository.IsExist(id);
         }
 
         public async Task<IEnumerable<FoodSimpleResponse>> Get()

@@ -21,6 +21,11 @@ namespace Services.CategoryServices
             _mapper = mapper;
         }
 
+        public async Task<bool> CategoryIsExist(Guid id)
+        {
+            return await _categoryRepository.IsExist(id);
+        }
+
         public async Task<Guid> Create(CreateCategoryRequest request)
         {
             var category = request.ConvertToCategory(_mapper);

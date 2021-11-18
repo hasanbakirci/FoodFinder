@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Context;
+using Data.Repositories.CategoryRepository;
+using Data.Repositories.CommentRepository;
+using Data.Repositories.FoodRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +16,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Services.CategoryServices;
+using Services.CommentServices;
+using Services.FoodServices;
+using Services.Mapping;
 
 namespace API
 {
@@ -30,6 +37,18 @@ namespace API
         {
 
             services.AddControllers();
+
+            services.AddScoped<ICategoryRepository, EfCategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
+            services.AddScoped<ICommentRepository, EfCommentRepository>();
+            services.AddScoped<ICommentService, CommentService>();
+
+            services.AddScoped<IFoodRepository, EfFoodRepository>();
+            services.AddScoped<IFoodService, FoodService>();
+
+            services.AddAutoMapper(typeof(MappingProfile));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });

@@ -33,7 +33,7 @@ namespace Data.Repositories.FoodRepository
             return result == 1 ? true : false;
         }
 
-        public async Task<bool> FoodIsExist(Guid id)
+        public async Task<bool> IsExist(Guid id)
         {
             return await _context.foods.AnyAsync(f => f.Id == id);
         }
@@ -45,7 +45,7 @@ namespace Data.Repositories.FoodRepository
 
         public async Task<IEnumerable<Food>> GetByCategoryName(string categoryName)
         {
-            return await _context.foods.Include(c => c.Category).Include(c => c.Comments).Where(f => f.Category.Name == categoryName).ToListAsync();
+            return await _context.foods.Include(c => c.Category).Include(c => c.Comments).Where(f => f.Category.Name.ToLower().Contains(categoryName.ToLower())).ToListAsync();
         }
 
         public async Task<Food> GetById(Guid id)

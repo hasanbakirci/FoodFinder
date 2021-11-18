@@ -8,7 +8,6 @@ namespace Data.Repositories.FoodRepository
 {
     public interface IFoodRepository : IRepository<Food>
     {
-        Task<bool> FoodIsExist(Guid id);
         Task<IEnumerable<Food>> GetByCategoryName(string categoryName);
         Task<IEnumerable<Food>> GetByIngredients(string ingredient);
     }

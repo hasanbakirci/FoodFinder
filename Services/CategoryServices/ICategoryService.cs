@@ -14,5 +14,6 @@ namespace Services.CategoryServices
         Task<Guid> Create(CreateCategoryRequest request);
         Task<bool> Update(UpdateCategoryRequest request);
         Task<bool> Delete(Guid id);
+        Task<bool> CategoryIsExist(Guid id);
     }
 }

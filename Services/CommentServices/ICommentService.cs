@@ -14,6 +14,7 @@ namespace Services.CommentServices
         Task<Guid> Create(CreateCommentRequest request);
         Task<bool> Update(UpdateCommentRequest request);
         Task<bool> Delete(Guid id);
+        Task<bool> CommentIsExist(Guid id);
         Task<IEnumerable<CommentResponse>> GetByFoodName(string foodName);
     }
 }
