@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Services.CategoryServices;
 using Services.Dtos.Requests.CategoryRequests;
@@ -11,7 +8,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : BaseController
     {
         private readonly ICategoryService _categoryService;
 
@@ -19,61 +16,49 @@ namespace API.Controllers
         {
             _categoryService = categoryService;
         }
+        
         [HttpGet]
-        public async Task<IActionResult> Get(){
+        public async Task<IActionResult> GetAll(){
+
             var categories = await _categoryService.Get();
-            return Ok(categories);
+            return ApiResponse(categories);
+
         }
+
         [HttpGet("Search/{id}")]
-        public async Task<IActionResult> GetById(Guid id){
-            var isExist = await _categoryService.CategoryIsExist(id);
-            if(isExist){
-                var category = await _categoryService.GetById(id);
-                return Ok(category);
-            }
-            return NotFound("Id Not Fount !");
+        public async Task<IActionResult> GetById(Guid id)
+        {
+
+            var category = await _categoryService.GetById(id);
+            return ApiResponse(category);
+
         }
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id){
-            var isExist = await _categoryService.CategoryIsExist(id);
-            if(isExist){
-                var result = await _categoryService.Delete(id);
-                if(result){
-                   return Ok(result); 
-                }
-                return BadRequest(result);
-            }
-            return NotFound("Id Not Fount !");
+        public async Task<IActionResult> Delete(Guid id)
+        {
+
+            var result = await _categoryService.Delete(id);
+            return ApiResponse(result);
+
         }
+
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateCategoryRequest request){
-            var isExist = await _categoryService.CategoryIsExist(request.Id);
-            if (!isExist){
-                return NotFound("Id Not Found !");
-            }
-            try
-            {
-                UpdateCategoryRequestValidator validator = new UpdateCategoryRequestValidator();
-                validator.ValidateAndThrow(request);
-                var result = await _categoryService.Update(request);
-                return Ok(result);
-            }
-            catch(Exception ex){
-                return BadRequest(ex.Message);
-            }
+        public async Task<IActionResult> Update([FromBody] UpdateCategoryRequest request)
+        {
+
+            var result = await _categoryService.Update(request);
+            return ApiResponse(result);
+
         }
+
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request){
-            try
-            {
-                CreateCategoryRequestValidator validator = new CreateCategoryRequestValidator();
-                validator.ValidateAndThrow(request);
-                var result = await _categoryService.Create(request);
-                return Ok(result);
-            }
-            catch(Exception ex){
-                return BadRequest(ex.Message);
-            }  
+        public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request)
+        {
+
+            var result = await _categoryService.Create(request);
+            return ApiResponse(result);
+
         }
     }
 }

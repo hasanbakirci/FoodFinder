@@ -39,13 +39,13 @@ namespace API
             services.AddControllers();
 
             services.AddScoped<ICategoryRepository, EfCategoryRepository>();
-            services.AddScoped<ICategoryService, CategoryService>();
-
             services.AddScoped<ICommentRepository, EfCommentRepository>();
-            services.AddScoped<ICommentService, CommentService>();
-
             services.AddScoped<IFoodRepository, EfFoodRepository>();
+
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IFoodService, FoodService>();
+            
 
             services.AddAutoMapper(typeof(MappingProfile));
 

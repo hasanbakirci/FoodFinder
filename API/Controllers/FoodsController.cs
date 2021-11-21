@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Services.Dtos.Requests.FoodRequests;
 using Services.FoodServices;
@@ -11,7 +8,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FoodsController : ControllerBase
+    public class FoodsController : BaseController
     {
         private readonly IFoodService _foodService;
 
@@ -19,70 +16,68 @@ namespace API.Controllers
         {
             _foodService = foodService;
         }
+
         [HttpGet]
-        public async Task<IActionResult> Get(){
+        public async Task<IActionResult> Get()
+        {
+
             var foods = await _foodService.Get();
-            return Ok(foods);
+            return ApiResponse(foods);
+
         }
+
         [HttpGet("Search/{id}")]
-        public async Task<IActionResult> GetById(Guid id){
-            var isExist = await _foodService.FoodIsExist(id);
-            if(isExist){
-                var food = await _foodService.GetById(id);
-                return Ok(food);
-            }
-            return NotFound("Id Not Found !");
+        public async Task<IActionResult> GetById(Guid id)
+        {
+
+            var food = await _foodService.GetById(id);
+            return ApiResponse(food);
+
         }
+
         [HttpGet("SearchCategory/{name}")]
-        public async Task<IActionResult> GetByCategoryName(string name){
+        public async Task<IActionResult> GetByCategoryName(string name)
+        {
+
             var foods = await _foodService.GetByCategoryName(name);
-            return Ok(foods);
+            return ApiResponse(foods);
+
         }
+
         [HttpGet("SearchIngredient/{ingredient}")]
-        public async Task<IActionResult> GetByIngredients(string ingredient){
+        public async Task<IActionResult> GetByIngredients(string ingredient)
+        {
+
             var foods = await _foodService.GetByIngredients(ingredient);
-            return Ok(foods);
+            return ApiResponse(foods);
+
         }
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id){
-           var isExist = await _foodService.FoodIsExist(id);
-            if(isExist){
-                var result = await _foodService.Delete(id);
-                return Ok(result);
-            }
-            return NotFound("Id Not Found !"); 
+        public async Task<IActionResult> Delete(Guid id)
+        {
+
+            var result = await _foodService.Delete(id);
+            return ApiResponse(result);
+
         }
+
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateFoodRequest request){
-            var isExist = await _foodService.FoodIsExist(request.Id);
-            if(!isExist){
-                return NotFound("Id Not Found !");
-            }
-            try
-            {
-                 UpdateFoodRequestValidator validator = new UpdateFoodRequestValidator();
-                 validator.ValidateAndThrow(request);
-                 var result = await _foodService.Update(request);
-                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        public async Task<IActionResult> Update([FromBody] UpdateFoodRequest request)
+        {
+
+            var result = await _foodService.Update(request);
+            return ApiResponse(result);
+
         }
+
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateFoodRequest request){
-            try
-            {
-                 CreateFoodRequestValidator validator = new CreateFoodRequestValidator();
-                 validator.ValidateAndThrow(request);
-                 var result = await _foodService.Create(request);
-                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        public async Task<IActionResult> Create([FromBody] CreateFoodRequest request)
+        {
+
+            var result = await _foodService.Create(request);
+            return ApiResponse(result);
+
         }
 
     }

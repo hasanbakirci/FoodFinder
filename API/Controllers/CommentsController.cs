@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +9,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CommentsController : ControllerBase
+    public class CommentsController : BaseController
     {
         private readonly ICommentService _commentService;
 
@@ -19,65 +17,65 @@ namespace API.Controllers
         {
             _commentService = commentService;
         }
+
         [HttpGet]
-        public async Task<IActionResult> Get(){
+        public async Task<IActionResult> GetAll()
+        {
+
             var comments = await _commentService.Get();
-            return Ok(comments);
+            return ApiResponse(comments);
+
         }
+
         [HttpGet("Search/{id}")]
-        public async Task<IActionResult> GetById(Guid id){
-            var isExist = await _commentService.CommentIsExist(id);
-            if(isExist){
-                var comment = await _commentService.GetById(id);
-                return Ok(comment);
-            }
-            return NotFound("Id Not Found !");
+        public async Task<IActionResult> GetById(Guid id)
+        {
+
+            var comment = await _commentService.GetById(id);
+            return ApiResponse(comment);
+
         }
+
         [HttpGet("SearchFood/{food}")]
-        public async Task<IActionResult> GetByFoodName(string food){
+        public async Task<IActionResult> GetByFoodName(string food)
+        {
+
             var comments = await _commentService.GetByFoodName(food);
-            return Ok(comments);
+            return ApiResponse(comments);
+
         }
+
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id){
-            var isExist = await _commentService.CommentIsExist(id);
-            if(isExist){
-                var result = await _commentService.Delete(id);
-                return Ok(result);
-            }
-            return NotFound("Id Not Found !");
+        public async Task<IActionResult> Delete(Guid id)
+        {
+
+            var result = await _commentService.Delete(id);
+            return ApiResponse(result);
+
         }
+
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateCommentRequest request){
-            var isExist = await _commentService.CommentIsExist(request.Id);
-            if(!isExist){
-                return NotFound("Id Not Found !");
-            }
-            try
-            {
-                UpdateCommentRequestValidator validator = new UpdateCommentRequestValidator();
-                validator.ValidateAndThrow(request);
-                var result = await _commentService.Update(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        public async Task<IActionResult> Update([FromBody] UpdateCommentRequest request)
+        {
+
+            var result = await _commentService.Update(request);
+            return ApiResponse(result);
+            
         }
+
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCommentRequest request){
-            try
-            {
-                CreateCommentRequestValidator validator = new CreateCommentRequestValidator();
-                validator.ValidateAndThrow(request);
-                var result = await _commentService.Create(request);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        public async Task<IActionResult> Create([FromBody] CreateCommentRequest request)
+        {
+
+            var result = await _commentService.Create(request);
+            return ApiResponse(result);
+
+        }
+
+        [HttpGet("SearchStatus/")]
+        public async Task<IActionResult> GetAllByStatusIsFalse(){
+            var result = await _commentService.GetAllByStatusIsFalse();
+            return ApiResponse(result);
         }
     }
 }
