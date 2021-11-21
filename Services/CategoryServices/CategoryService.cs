@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Core.ApiResult;
 using Data.Repositories.CategoryRepository;
+using FluentValidation;
 using Services.Dtos.Requests.CategoryRequests;
 using Services.Dtos.Responses.CategoryResponses;
 using Services.Extensions;
@@ -21,39 +23,86 @@ namespace Services.CategoryServices
             _mapper = mapper;
         }
 
-        public async Task<bool> CategoryIsExist(Guid id)
+        public async Task<ApiResponse<Guid>> Create(CreateCategoryRequest request)
         {
-            return await _categoryRepository.IsExist(id);
+            try
+            {
+                var category = request.ConvertToCategory(_mapper);
+                CreateCategoryRequestValidator validator = new CreateCategoryRequestValidator();
+                validator.ValidateAndThrow(request);
+                var result = await _categoryRepository.Create(category);
+                return new SuccessApiResponse<Guid>(result);
+            }
+            catch (Exception ex)
+            {
+
+                return new ErrorApiResponse<Guid>(ResponseStatus.BadRequest, data: default, message: ex.Message);
+
+            }
         }
 
-        public async Task<Guid> Create(CreateCategoryRequest request)
+        public async Task<ApiResponse<bool>> Delete(Guid id)
         {
-            var category = request.ConvertToCategory(_mapper);
-            return await _categoryRepository.Create(category);
+            var isExist = await _categoryRepository.IsExist(id);
+            if (!isExist)
+            {
+
+                return new ErrorApiResponse<bool>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
+
+            }
+            var result = await _categoryRepository.Delete(id);
+
+            if (result)
+            {
+                return new SuccessApiResponse<bool>(result);
+            }
+            return new ErrorApiResponse<bool>(ResponseStatus.BadRequest, data: default, message: ResultMessage.Error);
         }
 
-        public async Task<bool> Delete(Guid id)
-        {
-            return await _categoryRepository.Delete(id);
-        }
-
-        public async Task<IEnumerable<CategoryResponse>> Get()
+        public async Task<ApiResponse<IEnumerable<CategoryResponse>>> Get()
         {
             var categories = await _categoryRepository.Get();
-            return categories.ConvertToCategoryListResponse(_mapper);
-
+            return new SuccessApiResponse<IEnumerable<CategoryResponse>>(categories.ConvertToCategoryListResponse(_mapper));
         }
 
-        public async Task<CategoryResponse> GetById(Guid id)
+        public async Task<ApiResponse<CategoryResponse>> GetById(Guid id)
         {
+            var isExist = await _categoryRepository.IsExist(id);
+            if (!isExist)
+            {
+
+                return new ErrorApiResponse<CategoryResponse>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
+
+            }
             var category = await _categoryRepository.GetById(id);
-            return category.ConvertToCategoryResponse(_mapper);
+            return new SuccessApiResponse<CategoryResponse>(category.ConvertToCategoryResponse(_mapper));
         }
 
-        public async Task<bool> Update(UpdateCategoryRequest request)
+        public async Task<ApiResponse<bool>> Update(UpdateCategoryRequest request)
         {
-            var category = request.ConvertToCategory(_mapper);
-            return await _categoryRepository.Update(category);
+            var isExist = await _categoryRepository.IsExist(request.Id);
+            if (!isExist)
+            {
+
+                return new ErrorApiResponse<bool>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
+
+            }
+            try
+            {
+
+                var category = request.ConvertToCategory(_mapper);
+                UpdateCategoryRequestValidator validator = new UpdateCategoryRequestValidator();
+                validator.ValidateAndThrow(request);
+                var result = await _categoryRepository.Update(category);
+                return new SuccessApiResponse<bool>(result);
+
+            }
+            catch (Exception ex)
+            {
+
+                return new ErrorApiResponse<bool>(ResponseStatus.BadRequest, data: default, message: ex.Message);
+
+            }
         }
     }
 }

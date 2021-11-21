@@ -20,6 +20,7 @@ namespace Data.Repositories.CommentRepository
         public async Task<Guid> Create(Comment entity)
         {
             entity.CreatedAt = DateTime.Now;
+            entity.Status = false;
             _context.comments.Add(entity);
             await _context.SaveChangesAsync();
             return entity.Id;
@@ -36,6 +37,11 @@ namespace Data.Repositories.CommentRepository
         public async Task<IEnumerable<Comment>> Get()
         {
             return await _context.comments.Include(f => f.Food).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Comment>> GetAllByStatusIsFalse()
+        {
+            return await _context.comments.Include(f => f.Food).Where(c => c.Status == false).ToListAsync();
         }
 
         public async Task<IEnumerable<Comment>> GetByFoodName(string foodName)

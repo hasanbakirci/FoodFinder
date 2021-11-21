@@ -50,7 +50,7 @@ namespace Data.Repositories.FoodRepository
 
         public async Task<Food> GetById(Guid id)
         {
-            return await _context.foods.Include(c => c.Category).Include(c => c.Comments).FirstOrDefaultAsync(f => f.Id == id);
+            return await _context.foods.Include(c => c.Category).Include(c => c.Comments.Where(x => x.Status == true)).FirstOrDefaultAsync(f => f.Id == id);
         }
 
         public async Task<IEnumerable<Food>> GetByIngredients(string ingredient)

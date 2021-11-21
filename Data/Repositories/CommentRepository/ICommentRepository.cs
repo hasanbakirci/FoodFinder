@@ -9,5 +9,6 @@ namespace Data.Repositories.CommentRepository
     public interface ICommentRepository : IRepository<Comment>
     {
         Task<IEnumerable<Comment>> GetByFoodName(string foodName);
+        Task<IEnumerable<Comment>> GetAllByStatusIsFalse();
     }
 }

@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Core.ApiResult;
 using Data.Repositories.CommentRepository;
+using FluentValidation;
 using Services.Dtos.Requests.CommentRequests;
 using Services.Dtos.Responses.CommentResponses;
 using Services.Extensions;
@@ -21,44 +22,81 @@ namespace Services.CommentServices
             _mapper = mapper;
         }
 
-        public async Task<bool> CommentIsExist(Guid id)
+        public async Task<ApiResponse<Guid>> Create(CreateCommentRequest request)
         {
-            return await _commentRepository.IsExist(id);
+            try
+            {
+                var comment = request.ConvertToComment(_mapper);
+                CreateCommentRequestValidator validator = new CreateCommentRequestValidator();
+                validator.ValidateAndThrow(request);
+                var result = await _commentRepository.Create(comment);
+                return new SuccessApiResponse<Guid>(result);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse<Guid>(ResponseStatus.BadRequest, default, ex.Message);
+            }
         }
 
-        public async Task<Guid> Create(CreateCommentRequest request)
+        public async Task<ApiResponse<bool>> Delete(Guid id)
         {
-            var comment = request.ConvertToComment(_mapper);
-            return await _commentRepository.Create(comment);
+            var isExist = await _commentRepository.IsExist(id);
+            if(!isExist){
+                return new ErrorApiResponse<bool>(ResponseStatus.NotFound, default, ResultMessage.NotFoundComment);
+            }
+            var result = await _commentRepository.Delete(id);
+            if(result){
+                return new SuccessApiResponse<bool>(result);
+            }
+            return new ErrorApiResponse<bool>(ResponseStatus.BadRequest, default, ResultMessage.Error);
         }
 
-        public async Task<bool> Delete(Guid id)
-        {
-            return await _commentRepository.Delete(id);
-        }
-
-        public async Task<IEnumerable<CommentResponse>> Get()
+        public async Task<ApiResponse<IEnumerable<CommentResponse>>> Get()
         {
             var comments = await _commentRepository.Get();
-            return comments.ConvertToCommentListResponse(_mapper);
+            return new SuccessApiResponse<IEnumerable<CommentResponse>>(comments.ConvertToCommentListResponse(_mapper)); 
         }
 
-        public async Task<IEnumerable<CommentResponse>> GetByFoodName(string foodName)
+        public async Task<ApiResponse<IEnumerable<CommentResponse>>> GetAllByStatusIsFalse()
+        {
+            var comments = await _commentRepository.GetAllByStatusIsFalse();
+            return new SuccessApiResponse<IEnumerable<CommentResponse>>(comments.ConvertToCommentListResponse(_mapper));
+        }
+
+        public async Task<ApiResponse<IEnumerable<CommentResponse>>> GetByFoodName(string foodName)
         {
             var comments = await _commentRepository.GetByFoodName(foodName);
-            return comments.ConvertToCommentListResponse(_mapper);
+            return new SuccessApiResponse<IEnumerable<CommentResponse>>(comments.ConvertToCommentListResponse(_mapper)); 
         }
 
-        public async Task<CommentResponse> GetById(Guid id)
+        public async Task<ApiResponse<CommentResponse>> GetById(Guid id)
         {
+            var isExist = await _commentRepository.IsExist(id);
+            if(!isExist){
+                return new ErrorApiResponse<CommentResponse>(ResponseStatus.NotFound,default,ResultMessage.NotFoundComment);
+            }
             var comment = await _commentRepository.GetById(id);
-            return comment.ConvertToCommentResponse(_mapper);
+            return new SuccessApiResponse<CommentResponse>(comment.ConvertToCommentResponse(_mapper)); 
         }
 
-        public async Task<bool> Update(UpdateCommentRequest request)
+        public async Task<ApiResponse<bool>> Update(UpdateCommentRequest request)
         {
-            var comment = request.ConvertToComment(_mapper);
-            return await _commentRepository.Update(comment);
+            var isExist = await _commentRepository.IsExist(request.Id);
+            if(!isExist){
+                return new ErrorApiResponse<bool>(ResponseStatus.NotFound,default,ResultMessage.NotFoundComment);
+            }
+            try
+            {
+                var comment = request.ConvertToComment(_mapper);
+                UpdateCommentRequestValidator validator = new UpdateCommentRequestValidator();
+                validator.ValidateAndThrow(request);
+                var result = await _commentRepository.Update(comment);
+                return new SuccessApiResponse<bool>(result);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorApiResponse<bool>(ResponseStatus.BadRequest,default,ex.Message);
+            }
         }
     }
 }
