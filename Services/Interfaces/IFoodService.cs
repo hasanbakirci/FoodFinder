@@ -5,7 +5,7 @@ using Core.ApiResult;
 using Services.Dtos.Requests.FoodRequests;
 using Services.Dtos.Responses.FoodResponses;
 
-namespace Services.FoodServices
+namespace Services.Interfaces
 {
     public interface IFoodService
     {

@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Services.Dtos.Requests.FoodRequests;
-using Services.FoodServices;
+using Services.Interfaces;
 
 namespace API.Controllers
 {

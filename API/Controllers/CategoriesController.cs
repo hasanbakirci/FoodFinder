@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Services.CategoryServices;
 using Services.Dtos.Requests.CategoryRequests;
+using Services.Interfaces;
 
 namespace API.Controllers
 {

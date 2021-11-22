@@ -6,7 +6,7 @@ using Core.ApiResult;
 using Services.Dtos.Requests.CategoryRequests;
 using Services.Dtos.Responses.CategoryResponses;
 
-namespace Services.CategoryServices
+namespace Services.Interfaces
 {
     public interface ICategoryService
     {

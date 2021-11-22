@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Context;
+using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 
-namespace Data.Repositories.FoodRepository
+namespace Data
 {
     public class EfFoodRepository : IFoodRepository
     {

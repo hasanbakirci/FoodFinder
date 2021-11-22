@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.ApiResult;
-using Data.Repositories.CommentRepository;
+using Data.Interfaces;
 using FluentValidation;
 using Services.Dtos.Requests.CommentRequests;
 using Services.Dtos.Responses.CommentResponses;
 using Services.Extensions;
+using Services.Interfaces;
 
-namespace Services.CommentServices
+namespace Services
 {
     public class CommentService : ICommentService
     {

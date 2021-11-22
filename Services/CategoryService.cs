@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.ApiResult;
-using Data.Repositories.CategoryRepository;
+using Data.Interfaces;
 using FluentValidation;
 using Services.Dtos.Requests.CategoryRequests;
 using Services.Dtos.Responses.CategoryResponses;
 using Services.Extensions;
+using Services.Interfaces;
 
-namespace Services.CategoryServices
+namespace Services
 {
     public class CategoryService : ICategoryService
     {

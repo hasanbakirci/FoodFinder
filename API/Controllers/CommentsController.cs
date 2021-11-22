@@ -1,9 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Services.CommentServices;
 using Services.Dtos.Requests.CommentRequests;
+using Services.Interfaces;
 
 namespace API.Controllers
 {

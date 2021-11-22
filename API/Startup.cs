@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Data;
 using Data.Context;
-using Data.Repositories.CategoryRepository;
-using Data.Repositories.CommentRepository;
-using Data.Repositories.FoodRepository;
+using Data.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,9 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Services.CategoryServices;
-using Services.CommentServices;
-using Services.FoodServices;
+using Services;
+using Services.Interfaces;
 using Services.Mapping;
 
 namespace API

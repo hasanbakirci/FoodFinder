@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Models.Entities;
 
-namespace Data.Repositories
+namespace Data.Interfaces
 {
     public interface IRepository<T> where T: IEntity,new()
     {

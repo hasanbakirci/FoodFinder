@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Models.Entities;
 
-namespace Data.Repositories.FoodRepository
+namespace Data.Interfaces
 {
     public interface IFoodRepository : IRepository<Food>
     {

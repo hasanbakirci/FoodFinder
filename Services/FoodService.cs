@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.ApiResult;
-using Data.Repositories.FoodRepository;
+using Data.Interfaces;
 using FluentValidation;
 using Services.Dtos.Requests.FoodRequests;
 using Services.Dtos.Responses.FoodResponses;
 using Services.Extensions;
+using Services.Interfaces;
 
-namespace Services.FoodServices
+namespace Services
 {
     public class FoodService : IFoodService
     {

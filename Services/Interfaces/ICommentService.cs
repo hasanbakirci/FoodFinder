@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Core.ApiResult;
 using Services.Dtos.Requests.CommentRequests;
 using Services.Dtos.Responses.CommentResponses;
 
-namespace Services.CommentServices
+namespace Services.Interfaces
 {
     public interface ICommentService
     {

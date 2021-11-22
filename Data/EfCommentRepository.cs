@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Context;
+using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 
-namespace Data.Repositories.CommentRepository
+namespace Data
 {
     public class EfCommentRepository : ICommentRepository
     {
