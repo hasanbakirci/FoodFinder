@@ -21,5 +21,7 @@ namespace Core.ApiResult
         public static string NotFoundComment => "messages.error.category.notFoundComment";
         
         public static string NotFoundFood => "messages.error.category.notFoundFood";
+
+        public static string InvalidUserEmailOrPassword => "messages.error.user.invalidUserEmailOrPassword";
     }
 }

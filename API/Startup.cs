@@ -1,6 +1,8 @@
+using System.Text;
 using Data;
 using Data.Context;
 using Data.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Services;
 using Services.Interfaces;
@@ -39,6 +42,7 @@ namespace API
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IFoodService, FoodService>();
+            services.AddScoped<IUserService, UserService>();
             
 
             services.AddAutoMapper(typeof(MappingProfile));
@@ -50,6 +54,25 @@ namespace API
 
             var connectionString = Configuration.GetConnectionString("db");
             services.AddDbContext<FoodApplicationDbContext>(option => option.UseNpgsql(connectionString));
+
+            // JWT Bearer için aşağıdaki kodları kullandık
+            var bearer = Configuration.GetSection("Bearer"); // appsettings.json a ulaştı
+            var issuer = bearer["Issuer"];
+            var audience = bearer["Audience"];
+            var securityKey = bearer["SecurityKey"];
+            //Jwt nin nasıl üretileceğini ve oynaylanacağının kurallarını yazdık
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(option =>{
+                        option.TokenValidationParameters = new TokenValidationParameters{
+                            ValidateActor=true,
+                            ValidateIssuer=true,
+                            ValidateAudience=true,
+                            ValidateIssuerSigningKey=true,
+                            ValidIssuer = issuer,
+                            ValidAudience = audience,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey))
+                        };
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +88,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

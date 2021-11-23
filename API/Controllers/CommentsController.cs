@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Dtos.Requests.CommentRequests;
 using Services.Interfaces;
@@ -18,6 +19,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
 
@@ -45,6 +47,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
 
@@ -54,6 +57,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update([FromBody] UpdateCommentRequest request)
         {
 
@@ -72,6 +76,7 @@ namespace API.Controllers
         }
 
         [HttpGet("SearchStatus/")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllByStatusIsFalse(){
             var result = await _commentService.GetAllByStatusIsFalse();
             return ApiResponse(result);
