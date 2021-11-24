@@ -55,6 +55,15 @@ namespace API
             var connectionString = Configuration.GetConnectionString("db");
             services.AddDbContext<FoodApplicationDbContext>(option => option.UseNpgsql(connectionString));
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowMyOrigin", builder =>
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
+
             // JWT Bearer için aşağıdaki kodları kullandık
             var bearer = Configuration.GetSection("Bearer"); // appsettings.json a ulaştı
             var issuer = bearer["Issuer"];
@@ -90,6 +99,8 @@ namespace API
             app.UseRouting();
 
             app.UseAuthentication();
+
+            app.UseCors("AllowMyOrigin");
 
             app.UseAuthorization();
 
