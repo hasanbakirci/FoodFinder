@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.ApiResult;
+using Core.Result;
 using Data.Interfaces;
 using FluentValidation;
 using Services.Dtos.Requests.FoodRequests;
@@ -10,7 +10,7 @@ using Services.Dtos.Responses.FoodResponses;
 using Services.Extensions;
 using Services.Interfaces;
 
-namespace Services
+namespace Services.Services
 {
     public class FoodService : IFoodService
     {
@@ -23,7 +23,7 @@ namespace Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<Guid>> Create(CreateFoodRequest request)
+        public async Task<Response<Guid>> Create(CreateFoodRequest request)
         {
             try
             {
@@ -31,65 +31,65 @@ namespace Services
                 CreateFoodRequestValidator validator = new CreateFoodRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _foodRepository.Create(food);
-                return new SuccessApiResponse<Guid>(result);
+                return new SuccessResponse<Guid>(result);
             }
             catch (Exception ex)
             {
-                return new ErrorApiResponse<Guid>(ResponseStatus.BadRequest, default, ex.Message);
+                return new ErrorResponse<Guid>(ResponseStatus.BadRequest, default, ex.Message);
             }
         }
 
-        public async Task<ApiResponse<bool>> Delete(Guid id)
+        public async Task<Response<bool>> Delete(Guid id)
         {
             var isExist = await _foodRepository.IsExist(id);
             if (!isExist)
             {
-                return new ErrorApiResponse<bool>(ResponseStatus.NotFound, default, ResultMessage.NotFoundFood);
+                return new ErrorResponse<bool>(ResponseStatus.NotFound, default, ResultMessage.NotFoundFood);
             }
             var result = await _foodRepository.Delete(id);
             if (result)
             {
-                return new SuccessApiResponse<bool>(result);
+                return new SuccessResponse<bool>(result);
             }
-            return new ErrorApiResponse<bool>(ResponseStatus.BadRequest, default, ResultMessage.Error);
+            return new ErrorResponse<bool>(ResponseStatus.BadRequest, default, ResultMessage.Error);
         }
 
 
-        public async Task<ApiResponse<IEnumerable<FoodSimpleResponse>>> Get()
+        public async Task<Response<IEnumerable<FoodSimpleResponse>>> Get()
         {
             var foods = await _foodRepository.Get();
-            return new SuccessApiResponse<IEnumerable<FoodSimpleResponse>>(foods.ConvertToFoodSimpleListResponse(_mapper));
+            return new SuccessResponse<IEnumerable<FoodSimpleResponse>>(foods.ConvertToFoodSimpleListResponse(_mapper));
         }
 
-        public async Task<ApiResponse<IEnumerable<FoodSimpleResponse>>> GetByCategoryName(string categoryName)
+        public async Task<Response<IEnumerable<FoodSimpleResponse>>> GetByCategoryName(string categoryName)
         {
             var foods = await _foodRepository.GetByCategoryName(categoryName);
-            return new SuccessApiResponse<IEnumerable<FoodSimpleResponse>>(foods.ConvertToFoodSimpleListResponse(_mapper));
+            return new SuccessResponse<IEnumerable<FoodSimpleResponse>>(foods.ConvertToFoodSimpleListResponse(_mapper));
         }
 
-        public async Task<ApiResponse<FoodDetailResponse>> GetById(Guid id)
+        public async Task<Response<FoodDetailResponse>> GetById(Guid id)
         {
             var isExist = await _foodRepository.IsExist(id);
             if (!isExist)
             {
-                return new ErrorApiResponse<FoodDetailResponse>(ResponseStatus.NotFound, default, ResultMessage.NotFoundFood);
+                return new ErrorResponse<FoodDetailResponse>(ResponseStatus.NotFound, default, ResultMessage.NotFoundFood);
             }
             var food = await _foodRepository.GetById(id);
-            return new SuccessApiResponse<FoodDetailResponse>(food.ConvertToFoodDetailResponse(_mapper));
+            return new SuccessResponse<FoodDetailResponse>(food.ConvertToFoodDetailResponse(_mapper));
         }
 
-        public async Task<ApiResponse<IEnumerable<FoodSimpleResponse>>> GetByIngredients(string ingredient)
+        public async Task<Response<IEnumerable<FoodSimpleResponse>>> GetByIngredients(string ingredient)
         {
             var foods = await _foodRepository.GetByIngredients(ingredient);
-            return new SuccessApiResponse<IEnumerable<FoodSimpleResponse>>(foods.ConvertToFoodSimpleListResponse(_mapper));
+            return new SuccessResponse<IEnumerable<FoodSimpleResponse>>(foods.ConvertToFoodSimpleListResponse(_mapper));
         }
 
-        public async Task<ApiResponse<bool>> Update(UpdateFoodRequest request)
+        public async Task<Response<bool>> Update(UpdateFoodRequest request)
         {
             var isExist = await _foodRepository.IsExist(request.Id);
             if (!isExist)
             {
-                return new ErrorApiResponse<bool>(ResponseStatus.NotFound, default, ResultMessage.NotFoundFood);
+                return new ErrorResponse<bool>(ResponseStatus.NotFound, default, ResultMessage.NotFoundFood);
             }
             try
             {
@@ -97,11 +97,11 @@ namespace Services
                 UpdateFoodRequestValidator validator = new UpdateFoodRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _foodRepository.Update(food);
-                return new SuccessApiResponse<bool>(result);
+                return new SuccessResponse<bool>(result);
             }
             catch (Exception ex)
             {
-                return new ErrorApiResponse<bool>(ResponseStatus.BadRequest, default, ex.Message);
+                return new ErrorResponse<bool>(ResponseStatus.BadRequest, default, ex.Message);
             }
         }
     }

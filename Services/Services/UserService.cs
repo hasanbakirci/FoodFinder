@@ -4,8 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Core.ApiResult;
+using Core.Result;
 using FluentValidation;
 using Microsoft.IdentityModel.Tokens;
 using Models.Entities;
@@ -13,7 +12,7 @@ using Services.Dtos.Requests.UserRequests;
 using Services.Dtos.Responses.UserResponses;
 using Services.Interfaces;
 
-namespace Services
+namespace Services.Services
 {
     public class UserService : IUserService
     {
@@ -27,7 +26,7 @@ namespace Services
         }
         // ---
 
-        public ApiResponse<LoginResponse> Login(LoginRequest request)
+        public Response<LoginResponse> Login(LoginRequest request)
         {
             try
             {
@@ -36,7 +35,7 @@ namespace Services
                 var user = IsValid(request.EmailAdress, request.Password);
                 if (user is null)
                 {
-                    return new ErrorApiResponse<LoginResponse>(ResponseStatus.BadRequest, default, ResultMessage.InvalidUserEmailOrPassword);
+                    return new ErrorResponse<LoginResponse>(ResponseStatus.BadRequest, default, ResultMessage.InvalidUserEmailOrPassword);
 
                 }
                 var claims = new[]{
@@ -53,11 +52,11 @@ namespace Services
                 audience: audience, claims: claims, notBefore: DateTime.Now, expires: DateTime.Now.AddMinutes(20),
                 signingCredentials: credential);
                 var result = new LoginResponse{Token = new JwtSecurityTokenHandler().WriteToken(token)};
-                return new SuccessApiResponse<LoginResponse>(result);
+                return new SuccessResponse<LoginResponse>(result);
             }
             catch (Exception ex)
             {
-                return new ErrorApiResponse<LoginResponse>(ResponseStatus.BadRequest,default,ex.Message);
+                return new ErrorResponse<LoginResponse>(ResponseStatus.BadRequest,default,ex.Message);
             }
         }
     }

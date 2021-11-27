@@ -7,7 +7,7 @@ using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Models.Entities;
 
-namespace Data
+namespace Data.Repository
 {
     public class EfFoodRepository : IFoodRepository
     {

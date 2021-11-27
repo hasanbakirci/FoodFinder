@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Core.ApiResult
+namespace Core.Result
 {
-    public class ApiResponse
+    public class Response
     {
-        public ApiResponse()
+        public Response()
         {
             
         }
-        public ApiResponse(ResponseStatus status, string message)
+        public Response(ResponseStatus status, string message)
         {
             StatusCode = (int)status;
             Success = StatusCode < 400;
@@ -23,9 +19,9 @@ namespace Core.ApiResult
     }
 
 
-    public class ApiResponse<T> : ApiResponse
+    public class Response<T> : Response
     {
-        public ApiResponse(ResponseStatus status, string message) : base(status,message)
+        public Response(ResponseStatus status, string message) : base(status,message)
         {
             
         }

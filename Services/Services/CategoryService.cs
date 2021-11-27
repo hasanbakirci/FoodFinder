@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.ApiResult;
+using Core.Result;
 using Data.Interfaces;
 using FluentValidation;
 using Services.Dtos.Requests.CategoryRequests;
@@ -10,7 +10,7 @@ using Services.Dtos.Responses.CategoryResponses;
 using Services.Extensions;
 using Services.Interfaces;
 
-namespace Services
+namespace Services.Services
 {
     public class CategoryService : ICategoryService
     {
@@ -23,7 +23,7 @@ namespace Services
             _mapper = mapper;
         }
 
-        public async Task<ApiResponse<Guid>> Create(CreateCategoryRequest request)
+        public async Task<Response<Guid>> Create(CreateCategoryRequest request)
         {
             try
             {
@@ -31,60 +31,60 @@ namespace Services
                 CreateCategoryRequestValidator validator = new CreateCategoryRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _categoryRepository.Create(category);
-                return new SuccessApiResponse<Guid>(result);
+                return new SuccessResponse<Guid>(result);
             }
             catch (Exception ex)
             {
 
-                return new ErrorApiResponse<Guid>(ResponseStatus.BadRequest, data: default, message: ex.Message);
+                return new ErrorResponse<Guid>(ResponseStatus.BadRequest, data: default, message: ex.Message);
 
             }
         }
 
-        public async Task<ApiResponse<bool>> Delete(Guid id)
+        public async Task<Response<bool>> Delete(Guid id)
         {
             var isExist = await _categoryRepository.IsExist(id);
             if (!isExist)
             {
 
-                return new ErrorApiResponse<bool>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
+                return new ErrorResponse<bool>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
 
             }
             var result = await _categoryRepository.Delete(id);
 
             if (result)
             {
-                return new SuccessApiResponse<bool>(result);
+                return new SuccessResponse<bool>(result);
             }
-            return new ErrorApiResponse<bool>(ResponseStatus.BadRequest, data: default, message: ResultMessage.Error);
+            return new ErrorResponse<bool>(ResponseStatus.BadRequest, data: default, message: ResultMessage.Error);
         }
 
-        public async Task<ApiResponse<IEnumerable<CategoryResponse>>> Get()
+        public async Task<Response<IEnumerable<CategoryResponse>>> Get()
         {
             var categories = await _categoryRepository.Get();
-            return new SuccessApiResponse<IEnumerable<CategoryResponse>>(categories.ConvertToCategoryListResponse(_mapper));
+            return new SuccessResponse<IEnumerable<CategoryResponse>>(categories.ConvertToCategoryListResponse(_mapper));
         }
 
-        public async Task<ApiResponse<CategoryResponse>> GetById(Guid id)
+        public async Task<Response<CategoryResponse>> GetById(Guid id)
         {
             var isExist = await _categoryRepository.IsExist(id);
             if (!isExist)
             {
 
-                return new ErrorApiResponse<CategoryResponse>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
+                return new ErrorResponse<CategoryResponse>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
 
             }
             var category = await _categoryRepository.GetById(id);
-            return new SuccessApiResponse<CategoryResponse>(category.ConvertToCategoryResponse(_mapper));
+            return new SuccessResponse<CategoryResponse>(category.ConvertToCategoryResponse(_mapper));
         }
 
-        public async Task<ApiResponse<bool>> Update(UpdateCategoryRequest request)
+        public async Task<Response<bool>> Update(UpdateCategoryRequest request)
         {
             var isExist = await _categoryRepository.IsExist(request.Id);
             if (!isExist)
             {
 
-                return new ErrorApiResponse<bool>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
+                return new ErrorResponse<bool>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
 
             }
             try
@@ -94,13 +94,13 @@ namespace Services
                 UpdateCategoryRequestValidator validator = new UpdateCategoryRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _categoryRepository.Update(category);
-                return new SuccessApiResponse<bool>(result);
+                return new SuccessResponse<bool>(result);
 
             }
             catch (Exception ex)
             {
 
-                return new ErrorApiResponse<bool>(ResponseStatus.BadRequest, data: default, message: ex.Message);
+                return new ErrorResponse<bool>(ResponseStatus.BadRequest, data: default, message: ex.Message);
 
             }
         }
