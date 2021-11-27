@@ -25,20 +25,20 @@ namespace Services.Services
 
         public async Task<Response<Guid>> Create(CreateCategoryRequest request)
         {
-            try
-            {
+            // try
+            // {
                 var category = request.ConvertToCategory(_mapper);
                 CreateCategoryRequestValidator validator = new CreateCategoryRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _categoryRepository.Create(category);
                 return new SuccessResponse<Guid>(result);
-            }
-            catch (Exception ex)
-            {
+            // }
+            // catch (Exception ex)
+            // {
 
-                return new ErrorResponse<Guid>(ResponseStatus.BadRequest, data: default, message: ex.Message);
+            //     return new ErrorResponse<Guid>(ResponseStatus.BadRequest, data: default, message: ex.Message);
 
-            }
+            // }
         }
 
         public async Task<Response<bool>> Delete(Guid id)
@@ -87,8 +87,8 @@ namespace Services.Services
                 return new ErrorResponse<bool>(ResponseStatus.NotFound, data: default, message: ResultMessage.NotFoundCategory);
 
             }
-            try
-            {
+            // try
+            // {
 
                 var category = request.ConvertToCategory(_mapper);
                 UpdateCategoryRequestValidator validator = new UpdateCategoryRequestValidator();
@@ -96,13 +96,13 @@ namespace Services.Services
                 var result = await _categoryRepository.Update(category);
                 return new SuccessResponse<bool>(result);
 
-            }
-            catch (Exception ex)
-            {
+            // }
+            // catch (Exception ex)
+            // {
 
-                return new ErrorResponse<bool>(ResponseStatus.BadRequest, data: default, message: ex.Message);
+            //     return new ErrorResponse<bool>(ResponseStatus.BadRequest, data: default, message: ex.Message);
 
-            }
+            // }
         }
     }
 }

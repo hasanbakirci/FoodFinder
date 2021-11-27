@@ -28,8 +28,8 @@ namespace Services.Services
 
         public Response<LoginResponse> Login(LoginRequest request)
         {
-            try
-            {
+            // try
+            // {
                 LoginRequestValidator validator = new LoginRequestValidator();
                 validator.ValidateAndThrow(request);
                 var user = IsValid(request.EmailAdress, request.Password);
@@ -53,11 +53,11 @@ namespace Services.Services
                 signingCredentials: credential);
                 var result = new LoginResponse{Token = new JwtSecurityTokenHandler().WriteToken(token)};
                 return new SuccessResponse<LoginResponse>(result);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorResponse<LoginResponse>(ResponseStatus.BadRequest,default,ex.Message);
-            }
+            // }
+            // catch (Exception ex)
+            // {
+            //     return new ErrorResponse<LoginResponse>(ResponseStatus.BadRequest,default,ex.Message);
+            // }
         }
     }
 }

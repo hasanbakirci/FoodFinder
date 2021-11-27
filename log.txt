@@ -1,0 +1,26 @@
+[Request]  HTTP GET - /api/Categories Date: 27.11.2021 17:27:22
+[Response] HTTP GET - /api/Categories responded 200 in 1626,3349ms Date: 27.11.2021 17:27:24
+[Request]  HTTP GET - /api/Categories Date: 27.11.2021 17:27:55
+[Response] HTTP GET - /api/Categories responded 200 in 33,2141ms Date: 27.11.2021 17:27:55
+[Request]  HTTP POST - /api/Users/login Date: 27.11.2021 17:28:08
+[Error]    HTTP POST - /api/Users/login - 500 Error Message Validation failed: 
+ -- EmailAdress: 'Email Adress'  geçerli bir e-posta adresi değil. Severity: Error in 71,6943ms Date: 27.11.2021 17:28:08
+[Request]  HTTP POST - /api/Users/login Date: 27.11.2021 17:30:02
+[Error]    HTTP POST - /api/Users/login - 500 Error Message Validation failed: 
+ -- EmailAdress: 'Email Adress'  geçerli bir e-posta adresi değil. Severity: Error in 1,8295ms Date: 27.11.2021 17:30:02
+[Request]  HTTP POST - /api/Users/login Date: 27.11.2021 17:30:11
+[Response] HTTP POST - /api/Users/login responded 200 in 104,8386ms Date: 27.11.2021 17:30:11
+[Request]  HTTP GET - /api/Comments/SearchStatus Date: 27.11.2021 17:30:41
+[Response] HTTP GET - /api/Comments/SearchStatus responded 200 in 236,0072ms Date: 27.11.2021 17:30:41
+[Request]  HTTP GET - /api/Foods Date: 27.11.2021 17:31:12
+[Response] HTTP GET - /api/Foods responded 200 in 86,0136ms Date: 27.11.2021 17:31:12
+[Request]  HTTP GET - /api/Foods/Search/5888173a-7b82-4f86-a382-d00fe9ff5790 Date: 27.11.2021 17:31:30
+[Response] HTTP GET - /api/Foods/Search/5888173a-7b82-4f86-a382-d00fe9ff5790 responded 200 in 105,252ms Date: 27.11.2021 17:31:30
+[Request]  HTTP POST - /api/Foods Date: 27.11.2021 17:32:14
+[Response] HTTP POST - /api/Foods responded 400 in 17,4713ms Date: 27.11.2021 17:32:14
+[Request]  HTTP POST - /api/Foods Date: 27.11.2021 17:34:22
+[Error]    HTTP POST - /api/Foods - 500 Error Message Validation failed: 
+ -- CategoryId: 'Category Id' boş olmamalı. Severity: Error
+ -- Name: 'Name' boş olmamalı. Severity: Error in 21,255ms Date: 27.11.2021 17:34:22
+[Request]  HTTP GET - /api/Categories Date: 27.11.2021 17:55:07
+[Response] HTTP GET - /api/Categories responded 200 in 1646,5755ms Date: 27.11.2021 17:55:09

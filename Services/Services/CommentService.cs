@@ -25,18 +25,18 @@ namespace Services.Services
 
         public async Task<Response<Guid>> Create(CreateCommentRequest request)
         {
-            try
-            {
+            // try
+            // {
                 var comment = request.ConvertToComment(_mapper);
                 CreateCommentRequestValidator validator = new CreateCommentRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _commentRepository.Create(comment);
                 return new SuccessResponse<Guid>(result);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorResponse<Guid>(ResponseStatus.BadRequest, default, ex.Message);
-            }
+            // }
+            // catch (Exception ex)
+            // {
+            //     return new ErrorResponse<Guid>(ResponseStatus.BadRequest, default, ex.Message);
+            // }
         }
 
         public async Task<Response<bool>> Delete(Guid id)
@@ -86,18 +86,18 @@ namespace Services.Services
             if(!isExist){
                 return new ErrorResponse<bool>(ResponseStatus.NotFound,default,ResultMessage.NotFoundComment);
             }
-            try
-            {
+            // try
+            // {
                 var comment = request.ConvertToComment(_mapper);
                 UpdateCommentRequestValidator validator = new UpdateCommentRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _commentRepository.Update(comment);
                 return new SuccessResponse<bool>(result);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorResponse<bool>(ResponseStatus.BadRequest,default,ex.Message);
-            }
+            // }
+            // catch (Exception ex)
+            // {
+            //     return new ErrorResponse<bool>(ResponseStatus.BadRequest,default,ex.Message);
+            // }
         }
     }
 }

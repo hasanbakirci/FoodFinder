@@ -1,4 +1,5 @@
 using System.Text;
+using API.Middlewares;
 using Data.Context;
 using Data.Interfaces;
 using Data.Repository;
@@ -35,11 +36,13 @@ namespace API
             services.AddScoped<ICategoryRepository, EfCategoryRepository>();
             services.AddScoped<ICommentRepository, EfCommentRepository>();
             services.AddScoped<IFoodRepository, EfFoodRepository>();
+            services.AddSingleton<ILoggerRepository, TxtLoggerRepository>();
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IFoodService, FoodService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<ILoggerService, TxtLoggerService>();
             
 
             services.AddAutoMapper(typeof(MappingProfile));
@@ -98,6 +101,8 @@ namespace API
             app.UseAuthentication();
 
             app.UseCors("AllowMyOrigin");
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseAuthorization();
 

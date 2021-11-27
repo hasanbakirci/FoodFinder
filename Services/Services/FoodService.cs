@@ -25,18 +25,18 @@ namespace Services.Services
 
         public async Task<Response<Guid>> Create(CreateFoodRequest request)
         {
-            try
-            {
+            // try
+            // {
                 var food = request.ConvertToFood(_mapper);
                 CreateFoodRequestValidator validator = new CreateFoodRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _foodRepository.Create(food);
                 return new SuccessResponse<Guid>(result);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorResponse<Guid>(ResponseStatus.BadRequest, default, ex.Message);
-            }
+            // }
+            // catch (Exception ex)
+            // {
+            //     return new ErrorResponse<Guid>(ResponseStatus.BadRequest, default, ex.Message);
+            // }
         }
 
         public async Task<Response<bool>> Delete(Guid id)
@@ -91,18 +91,18 @@ namespace Services.Services
             {
                 return new ErrorResponse<bool>(ResponseStatus.NotFound, default, ResultMessage.NotFoundFood);
             }
-            try
-            {
+            // try
+            // {
                 var food = request.ConvertToFood(_mapper);
                 UpdateFoodRequestValidator validator = new UpdateFoodRequestValidator();
                 validator.ValidateAndThrow(request);
                 var result = await _foodRepository.Update(food);
                 return new SuccessResponse<bool>(result);
-            }
-            catch (Exception ex)
-            {
-                return new ErrorResponse<bool>(ResponseStatus.BadRequest, default, ex.Message);
-            }
+            // }
+            // catch (Exception ex)
+            // {
+            //     return new ErrorResponse<bool>(ResponseStatus.BadRequest, default, ex.Message);
+            // }
         }
     }
 }
