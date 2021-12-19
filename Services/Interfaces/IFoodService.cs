@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Result;
+using Microsoft.AspNetCore.Http;
 using Services.Dtos.Requests.FoodRequests;
 using Services.Dtos.Responses.FoodResponses;
 
@@ -16,5 +17,6 @@ namespace Services.Interfaces
         Task<Response<bool>> Delete(Guid id);
         Task<Response<IEnumerable<FoodSimpleResponse>>> GetByCategoryName(string categoryName);
         Task<Response<IEnumerable<FoodSimpleResponse>>> GetByIngredients(string ingredient);
+        Task<Response<IEnumerable<FoodSimpleResponse>>> SearchForImage(IFormFile file);
     }
 }

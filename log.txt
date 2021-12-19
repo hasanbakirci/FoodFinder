@@ -24,3 +24,5 @@
  -- Name: 'Name' boş olmamalı. Severity: Error in 21,255ms Date: 27.11.2021 17:34:22
 [Request]  HTTP GET - /api/Categories Date: 27.11.2021 17:55:07
 [Response] HTTP GET - /api/Categories responded 200 in 1646,5755ms Date: 27.11.2021 17:55:09
+[Request]  HTTP GET - /api/Foods/SearchIngredient/un Date: 13.12.2021 23:11:34
+[Response] HTTP GET - /api/Foods/SearchIngredient/un responded 200 in 3,7553ms Date: 13.12.2021 23:11:34

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Dtos.Requests.FoodRequests;
 using Services.Interfaces;
@@ -51,6 +52,12 @@ namespace API.Controllers
             var foods = await _foodService.GetByIngredients(ingredient);
             return ApiResponse(foods);
 
+        }
+
+        [HttpPost("SearchImage")]
+        public async Task<IActionResult> SearchImage(IFormFile file){
+            var result = await _foodService.SearchForImage(file);
+            return ApiResponse(result);
         }
 
         [HttpDelete("{id}")]

@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
+using Core.Helpers;
 using Core.Result;
 using Data.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using Services.Dtos.Requests.FoodRequests;
 using Services.Dtos.Responses.FoodResponses;
 using Services.Extensions;
@@ -84,6 +90,18 @@ namespace Services.Services
             return new SuccessResponse<IEnumerable<FoodSimpleResponse>>(foods.ConvertToFoodSimpleListResponse(_mapper));
         }
 
+        public async Task<Response<IEnumerable<FoodSimpleResponse>>> SearchForImage(IFormFile file)
+        {
+            
+            var imagePath = await FileHelper.Add(file);
+            var result = await PostAiApi(imagePath);
+            if(result.Result is not null){
+                var foods = await _foodRepository.GetByIngredients(result.Result);
+                return new SuccessResponse<IEnumerable<FoodSimpleResponse>>(foods.ConvertToFoodSimpleListResponse(_mapper));
+            }
+            return new ErrorResponse<IEnumerable<FoodSimpleResponse>>(ResponseStatus.NotFound,default,"Kayıt bulunamadı.");  
+        }
+
         public async Task<Response<bool>> Update(UpdateFoodRequest request)
         {
             var isExist = await _foodRepository.IsExist(request.Id);
@@ -104,5 +122,32 @@ namespace Services.Services
             //     return new ErrorResponse<bool>(ResponseStatus.BadRequest, default, ex.Message);
             // }
         }
+
+        private async Task<AiResponse> PostAiApi(string path){
+            string url = "http://127.0.0.1:8000/";
+            var client = new HttpClient();
+
+            var multiForm = new MultipartFormDataContent();
+            FileStream fs = File.OpenRead(path);
+            multiForm.Add(new StreamContent(fs), "file", Path.GetFileName(path));
+
+            
+            HttpResponseMessage response = await client.PostAsync(url,multiForm);
+            if(response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<AiResponse>(responseBody);
+                Console.WriteLine("Filename: "+result.Filename +" Result: "+result.Result);
+                return result;
+            }
+            return null;
+
+        }
+    }
+
+    public class AiResponse{
+        public string Filename { get; set; }
+        public string Result { get; set; }
     }
 }
